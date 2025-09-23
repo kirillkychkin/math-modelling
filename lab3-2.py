@@ -56,8 +56,10 @@ def solve_linear_systems():
 def compute_condition_numbers():
 
     matrices = [
-        {'matrix': A, 'name': 'Матрица A (системы a,b)'},
-        {'matrix': C, 'name': 'Матрица C (системы c,d)'}
+        {'matrix': A, 'name': 'Матрица A'},
+        {'matrix': B, 'name': 'Матрица B'},
+        {'matrix': C, 'name': 'Матрица C'},
+        {'matrix': D, 'name': 'Матрица D'}
     ]
     
     for mat in matrices:
@@ -105,6 +107,8 @@ def analyze_sensitivity():
     
     print(f"\nИзменение в решении: {delta_x}")
     
+    print(f"\nЧисло обусловленности cond E(A) = {cond_2:.6f}")
+    
     # Анализ для систем c и d
     print("\n2. Сравнение систем c и d:")
     print("-" * 30)
@@ -120,6 +124,8 @@ def analyze_sensitivity():
     print(f"Изменение в правой части: {delta_b_cd}")
     
     print(f"\nИзменение в решении: {delta_x_cd}")
+    
+    print(f"\nЧисло обусловленности cond E(C) = {cond_2_cd:.6f}")
 
 solutions = solve_linear_systems()
 compute_condition_numbers()
