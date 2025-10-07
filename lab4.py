@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.linalg import lu, qr, cholesky, solve_triangular
+from scipy.linalg import lu, qr, cholesky, solve_triangular, eigh
 
 def solve_from_lu(P, L, U, b):
     y = solve_triangular(L, P @ b, lower=True)
@@ -15,6 +15,11 @@ def solve_from_chol(L, b):
     y = solve_triangular(L, b, lower=True)
     x = solve_triangular(L.T, y)
     return x
+
+def is_pos_def_eig(A):
+    A = np.asarray(A)
+    eigvals = eigh(A, eigvals_only=True)
+    return np.all(eigvals > 0)
 
 def thomas_algorithm(a, b, c, d):
     """
@@ -62,6 +67,12 @@ x_a_qr = solve_from_qr(Q, R, b_a)
 print("Задача (a)")
 print("LU:", x_a_lu)
 print("QR:", x_a_qr)
+if(is_pos_def_eig(A_a)):
+    L = cholesky(A_a, lower=True)
+    x_a_chol = solve_from_chol(L, b_a)
+    print("Cholesky:", x_a_chol)
+else:
+    print("Cholesky: не существует (матрица не положительно определена)")
 print()
 
 A_b = np.array([
@@ -83,6 +94,14 @@ x_b_qr = solve_from_qr(Q, R, b_b)
 print("Задача (б)")
 print("LU:", x_b_lu)
 print("QR:", x_b_qr)
+
+if(is_pos_def_eig(A_b)):
+    L = cholesky(A_b, lower=True)
+    x_b_chol = solve_from_chol(L, b_b)
+    print("Cholesky:", x_b_chol)
+else:
+    print("Cholesky: не существует (матрица не положительно определена)")
+print()
 
 try:
     L = cholesky(A_b, lower=True)
@@ -115,9 +134,12 @@ print("Прогонка:", x_v_thomas)
 print("LU:", x_v_lu)
 print("QR:", x_v_qr)
 
-L = cholesky(A_v, lower=True)
-x_v_chol = solve_from_chol(L, b_v)
-print("Cholesky:", x_v_chol)
+if(is_pos_def_eig(A_v)):
+    L = cholesky(A_v, lower=True)
+    x_v_chol = solve_from_chol(L, b_v)
+    print("Cholesky:", x_v_chol)
+else:
+    print("Cholesky: не существует (матрица не положительно определена)")
 print()
 
 A_g = np.array([
@@ -140,9 +162,19 @@ print("Задача (г)")
 print("LU:", x_g_lu)
 print("QR:", x_g_qr)
 
-try:
+a = np.array([1, 1, 2, 1, 2], dtype=float) # поддиагональ
+b_diag = np.array([10, -10, -10, -10, -10, -10], dtype=float)  # главная диагональ
+c = np.array([-1, 3, -2, -1, 1], dtype=float)     # наддиагональ
+
+# метод прогонки
+x_g_thomas = thomas_algorithm(a, b_diag, c, b_g)
+
+print("Прогонка:", x_g_thomas)
+
+if(is_pos_def_eig(A_g)):
     L = cholesky(A_g, lower=True)
     x_g_chol = solve_from_chol(L, b_g)
     print("Cholesky:", x_g_chol)
-except Exception:
+else:
     print("Cholesky: не существует (матрица не положительно определена)")
+print()
