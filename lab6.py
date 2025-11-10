@@ -1,6 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from scipy.optimize import fsolve, bisect, newton
+from scipy.optimize import fsolve, bisect
 
 # 1. Решение нелинейных уравнений итерационными методами
 
@@ -13,8 +12,19 @@ def f2(x):
 def f3(x):
     return np.log(x) - x**(1/3)
 
-# Метод половинного деления (бисекции)
 def bisection_method(f, a, b, eps=0.001):
+    """
+    Метод половинного деления для нахождения корня нелинейного уравнения
+
+    Параметры:
+    f - функция, для которой нужно найти корень
+    a, b - границы интервала, на котором ищем корень
+    eps - точность, которую хотим получить
+
+    Возвращает:
+    x_res - найденное приближение корня
+    iterations - количество итераций, которое потребовалось для нахождения результата
+    """
     iterations = 0
     if f(a) * f(b) >= 0:
         return None, iterations
@@ -31,8 +41,22 @@ def bisection_method(f, a, b, eps=0.001):
     
     return (a + b) / 2, iterations
 
-# Метод Ньютона
+
 def newton_method(f, f_prime, x0, eps=0.001, max_iter=100):
+    """
+    Метод Ньютона для нахождения корня нелинейного уравнения
+
+    Параметры:
+    f - функция, для которой нужно найти корень
+    f_prime - производная функции f
+    x0 - начальное приближение
+    eps - точность, которую хотим получить
+    max_iter - максимальное число итераций
+
+    Возвращает:
+    x_res - найденное приближение корня
+    iterations - количество итераций, которое потребовалось для нахождения результата
+    """
     iterations = 0
     x = x0
     for i in range(max_iter):
@@ -53,13 +77,10 @@ def f2_prime(x):
 def f3_prime(x):
     return 1/x - (1/3)*x**(-2/3)
 
-print("=" * 60)
-print("1. РЕШЕНИЕ НЕЛИНЕЙНЫХ УРАВНЕНИЙ")
-print("=" * 60)
+print("1. Решение нелинейных уравнений")
 
 # Уравнение a) x^3 - 2x + 2 = 0
 print("\na) x^3 - 2x + 2 = 0")
-print("-" * 30)
 
 # Метод половинного деления
 root_bisect, iter_bisect = bisection_method(f1, -2, -1)
@@ -85,7 +106,6 @@ except:
 
 # Уравнение b) sin(x) + x - 1 = 0
 print("\nb) sin(x) + x - 1 = 0")
-print("-" * 30)
 
 # Метод половинного деления
 root_bisect, iter_bisect = bisection_method(f2, 0, 1)
@@ -111,7 +131,6 @@ except:
 
 # Уравнение c) ln(x) - x^(1/3) = 0
 print("\nc) ln(x) - x^(1/3) = 0")
-print("-" * 30)
 
 # Метод половинного деления
 root_bisect, iter_bisect = bisection_method(f3, 1, 10)
@@ -137,9 +156,8 @@ except:
 
 # 2. Решение систем нелинейных уравнений методом Ньютона
 
-print("\n" + "=" * 60)
-print("2. РЕШЕНИЕ СИСТЕМ НЕЛИНЕЙНЫХ УРАВНЕНИЙ")
-print("=" * 60)
+print("\n")
+print("2. Решение систем нелинейных уравнений")
 
 # Система a)
 def system1(vars):
@@ -180,7 +198,6 @@ def newton_system(F, J, x0, eps=0.001, max_iter=100):
 print("\na) Система:")
 print("   sin(y) + 2x = 2")
 print("   cos(x-1) + y = 0.7")
-print("-" * 40)
 
 # Метод Ньютона
 solution, iterations = newton_system(system1, system1_jacobian, [0.5, 0.5])
@@ -210,7 +227,6 @@ def system2_jacobian(vars):
 print("\nb) Система:")
 print("   sin(x+1) - y = 1.2")
 print("   2x + cos(y) = 2")
-print("-" * 40)
 
 # Метод Ньютона
 solution, iterations = newton_system(system2, system2_jacobian, [0.5, -0.5])
