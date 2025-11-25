@@ -33,3 +33,20 @@ plt.subplot(224, title = "ln func", xlabel = "x", ylabel = "ln(x)")
 plt.plot(t1, parabola(t1), color='tab:red', linestyle='dashed')
 
 plt.show()
+
+'''
+plt.subplot(2, 1, 1)
+plt.subplot(2, 1, 2)
+# Погрешности
+plt.plot(x, np.abs(y_euler - y_exact), 'ro--', markersize=6, label='Ошибка Эйлера')
+plt.plot(x, np.abs(y_modified - y_exact), 'bs--', markersize=6, label='Ошибка мод. Эйлера')
+plt.plot(x, np.abs(y_rk - y_exact), 'g^--', markersize=6, label='Ошибка Рунге-Кутта')
+plt.xlabel('x')
+plt.ylabel('Абсолютная ошибка')
+plt.title('Погрешности методов')
+plt.legend()
+plt.grid(True)
+plt.yscale('log')
+
+plt.tight_layout()
+'''
