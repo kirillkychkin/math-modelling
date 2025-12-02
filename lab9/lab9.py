@@ -42,15 +42,14 @@ def runge_kutta_4th_order(f, t_span, y0, n_steps, *args):
     return t, y
 
 # Решение методом Рунге-Кутта 4-го порядка
-n_steps = 50
+n_steps = 100
 t_rk, y_rk = runge_kutta_4th_order(predator_prey, t_span, [v0, w0], n_steps, 
                                    alpha1, alpha2, alpha3, alpha4)
 v_rk, w_rk = y_rk[:, 0], y_rk[:, 1]
 
 # Решение с помощью solve_ivp
-sol = solve_ivp(predator_prey, t_span, [v0, w0], args=(alpha1, alpha2, alpha3, alpha4),
-                method='RK45', dense_output=True, max_step=0.1)
-t_ivp = np.linspace(0, T, 50)
+sol = solve_ivp(predator_prey, t_span, [v0, w0], args=(alpha1, alpha2, alpha3, alpha4), dense_output=True)
+t_ivp = np.linspace(0, T, 100)
 y_ivp = sol.sol(t_ivp)
 v_ivp, w_ivp = y_ivp[0], y_ivp[1]
 
@@ -94,7 +93,7 @@ def simulate_predator_prey(params, v0, w0, T=100):
         dwdt = (-alpha3 + alpha4 * v) * w
         return [dvdt, dwdt]
     
-    t_eval = np.linspace(0, T, 1000)
+    t_eval = np.linspace(0, T, 100)
     sol = solve_ivp(system, [0, T], [v0, w0], t_eval=t_eval, method='RK45')
     
     return sol.t, sol.y[0], sol.y[1]
